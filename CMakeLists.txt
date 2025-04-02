@@ -7,14 +7,24 @@ add_subdirectory(external/nodeeditor)
 
 qt_standard_project_setup()
 
+set(CMAKE_AUTORCC ON)
+
 
 set(CALC_SOURCE_FILES
+  src/StartNode/StartNodeDataModel.cpp
+  src/SimpleNode/SimpleNodeDataModel.cpp
   src/MathOperationDataModel.cpp
   src/NumberDisplayDataModel.cpp
   src/NumberSourceDataModel.cpp
 )
 
 set(CALC_HEADER_FILES
+  include/PropertiesWidget/PropertiesWidget.hpp
+  include/StartNode/StartNodeDataModel.hpp
+  include/SimpleNode/SimpleNodeDataModel.hpp
+  include/SimpleNode/SimpleNodeModel.hpp
+  include/DialogueData/DialogueData.hpp
+  include/DialogueData/SimpleDialogueData.hpp
   include/AdditionModel.hpp
   include/DivisionModel.hpp
   include/DecimalData.hpp
@@ -27,8 +37,12 @@ set(CALC_HEADER_FILES
 qt_add_executable(project-dialogue
     WIN32 MACOSX_BUNDLE
     src/main.cpp
+    src/MainWindow.cpp
+    include/MainWindow.h
     ${CALC_SOURCE_FILES}
     ${CALC_HEADER_FILES}
+    project-dialogue.qrc
+
 )
 
 target_link_libraries(project-dialogue
@@ -38,9 +52,12 @@ target_link_libraries(project-dialogue
         QtNodes
 )
 
-target_include_directories(project-dialogue
+target_include_directories(project-dialogue;
     PRIVATE
         include
+        include/DialogueData
+        include/StartNode
+        include/SimpleNode
         external/nodeeditor/include
 )
 
