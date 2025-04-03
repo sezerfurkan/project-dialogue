@@ -8,7 +8,7 @@
 
 StartNodeDataModel::StartNodeDataModel()
     : _lineEdit{nullptr}
-    , _dialogueData(std::make_shared<SimpleDialogueData>("New dialogue chain"))
+    , _dialogueData(std::make_shared<SimpleDialogueData>("New dialogue chain", true))
 {}
 
 QJsonObject StartNodeDataModel::save() const
@@ -85,7 +85,6 @@ QWidget *StartNodeDataModel::embeddedWidget()
     if (!_lineEdit) {
         _lineEdit = new QLineEdit();
 
-        _lineEdit->setValidator(new QDoubleValidator());
         _lineEdit->setMaximumSize(_lineEdit->sizeHint());
 
         connect(_lineEdit, &QLineEdit::textChanged, this, &StartNodeDataModel::onTextEdited);

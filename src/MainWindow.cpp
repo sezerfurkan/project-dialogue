@@ -122,21 +122,37 @@ void MainWindow::initPropertiesDockWidget(){
     PropertiesWidget *propertiesWidget = new PropertiesWidget(dockWidget);
 
     this->connect(dataFlowGraphModel, &DataFlowGraphModel::nodeCreated,
-                  this, [this, propertiesWidget](QtNodes::NodeId nodeId) {
+                  this, [this, propertiesWidget, dockWidget](QtNodes::NodeId nodeId) {
 
         SimpleNodeModel *simpleNodeModel = dynamic_cast<SimpleNodeModel*>
             (dataFlowGraphModel->delegateModel<NodeDelegateModel>(nodeId));
 
         if(simpleNodeModel != nullptr){
-            connect(simpleNodeModel, &SimpleNodeDataModel::buttonClicked,
-                    this, [this, propertiesWidget, simpleNodeModel]{
 
-                propertiesWidget->setDialogueTitle(simpleNodeModel->name());
+            connect(simpleNodeModel, &SimpleNodeDataModel::dataUpdated,
+                    this, [this, propertiesWidget, simpleNodeModel](PortIndex portIndex){
+
+                if (simpleNodeModel->getInputDialogue().lock() && propertiesWidget->dialogueTitle().isEmpty()){
+                    propertiesWidget->setDialogueTitle(simpleNodeModel->getInputDialogue().lock()->dialogueId());
+                    propertiesWidget->initDialogueMemory(simpleNodeModel->getInputDialogue().lock()->dialogueId());
+                }
+
+            });
+
+            connect(simpleNodeModel, &SimpleNodeDataModel::buttonClicked, this, [this, dockWidget, propertiesWidget, simpleNodeModel](){
+                if (simpleNodeModel->getInputDialogue().lock()){
+                    propertiesWidget->setDialogueTitle(simpleNodeModel->getInputDialogue().lock()->dialogueId());
+                    propertiesWidget->loadDialogueMemory(simpleNodeModel->getInputDialogue().lock()->dialogueId());
+                }
+
+                dockWidget->setVisible(true);
             });
         }
     });
 
     dockWidget->setWidget(propertiesWidget);
+
+    dockWidget->setVisible(false);
 
     this->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
 }

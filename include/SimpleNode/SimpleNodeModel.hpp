@@ -28,7 +28,8 @@ private:
         auto inputDialogue = _inputDialogue.lock();
 
         if (inputDialogue) {
-            _outputDialogue->setDialogueId("output");
+            _outputDialogue = std::make_shared<SimpleDialogueData>();
+            _outputDialogue->setDialogueId(inputDialogue->dialogueId());
         } else {
             _outputDialogue.reset();
         }
