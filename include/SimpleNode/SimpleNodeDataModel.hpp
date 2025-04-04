@@ -40,6 +40,10 @@ public:
 
     std::weak_ptr<SimpleDialogueData> getInputDialogue();
 
+    void setOutputDialogue(std::shared_ptr<SimpleDialogueData> outputDialogue);
+
+    std::shared_ptr<SimpleDialogueData> getOutputDialogue();
+
 signals:
     void buttonClicked();
 

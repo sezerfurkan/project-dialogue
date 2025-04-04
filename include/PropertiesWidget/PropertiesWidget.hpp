@@ -88,6 +88,7 @@ PropertiesWidget(QWidget *parent)
 
     connect(saveDialoguesButton, &QPushButton::clicked, this, [this]() {
         saveDialogues(dialoguesLayout, title->text());
+        Q_EMIT dialoguesSaved(title->text());
     });
 
     connect(clearDialoguesButton, &QPushButton::clicked, this, [this]() {
@@ -101,6 +102,7 @@ PropertiesWidget(QWidget *parent)
 
 void setDialogueTitle(QString title_){
     title->setText(title_);
+    qDebug() << "Dialogue title set: " << title_;
 }
 
 QString dialogueTitle(){
@@ -109,16 +111,25 @@ QString dialogueTitle(){
 
 void initDialogueMemory(QString dialogueId){
     dialoguesMemory[dialogueId] = std::make_shared<SimpleDialogueData>(dialogueId);
+    qDebug() << "Dialogue was inited: " << dialogueId;
 }
 
 void loadDialogueMemory(QString dialogueId){
     loadDialogues(dialoguesLayout, dialogueId, placeholderLabel);
+    qDebug() << "Dialogue was loaded: " << dialogueId;
 }
 
 void clearDialoguesMemory(){
     //dialoguesMemory->clear();
     //dialoguesMemory.clear();
 }
+
+std::shared_ptr<SimpleDialogueData> getDialogueFromMemory(QString dialogueId){
+    return dialoguesMemory[dialogueId];
+}
+
+signals:
+    void dialoguesSaved(QString dialogueId);
 
 private:
     QLabel *title;
@@ -309,6 +320,10 @@ private slots:
 
             delete item;
         }
+
+    }
+
+    void outputDialogues(){
 
     }
 

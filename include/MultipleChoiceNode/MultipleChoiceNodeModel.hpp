@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SimpleDialogueData.hpp"
-#include "SimpleNodeDataModel.hpp"
+#include "MultipleChoiceDialogueData.hpp"
+#include "MultipleChoiceNodeDataModel.hpp"
 
 #include <QtNodes/NodeDelegateModel>
 
@@ -10,15 +10,15 @@
 
 /// The model dictates the number of inputs and outputs for the Node.
 /// In this example it has no logic.
-class SimpleNodeModel : public SimpleNodeDataModel
+class MultipleChoiceNodeModel : public MultipleChoiceNodeDataModel
 {
 public:
-    ~SimpleNodeModel() = default;
+    ~MultipleChoiceNodeModel() = default;
 
 public:
-    QString caption() const override { return QStringLiteral("Simple Node"); }
+    QString caption() const override { return QStringLiteral("Multiple Choice Node"); }
 
-    QString name() const override { return QStringLiteral("Simple Node"); }
+    QString name() const override { return QStringLiteral("Multiple Choice Node"); }
 
 private:
     void compute() override

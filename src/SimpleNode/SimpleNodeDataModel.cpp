@@ -37,7 +37,8 @@ QWidget *SimpleNodeDataModel::embeddedWidget()
 
 std::shared_ptr<NodeData> SimpleNodeDataModel::outData(PortIndex)
 {
-    return std::static_pointer_cast<NodeData>(_outputDialogue);
+    //return std::static_pointer_cast<NodeData>(_outputDialogue);
+    return _outputDialogue;
 }
 
 void SimpleNodeDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex portIndex)
@@ -64,3 +65,13 @@ std::weak_ptr<SimpleDialogueData> SimpleNodeDataModel::getInputDialogue()
     return _inputDialogue.lock();
 }
 
+
+void SimpleNodeDataModel::setOutputDialogue(std::shared_ptr<SimpleDialogueData> outputDialogue)
+{
+    _outputDialogue = outputDialogue;
+}
+
+std::shared_ptr<SimpleDialogueData> SimpleNodeDataModel::getOutputDialogue()
+{
+    return _outputDialogue;
+}

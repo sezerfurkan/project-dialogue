@@ -13,6 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CALC_SOURCE_FILES
   src/StartNode/StartNodeDataModel.cpp
   src/SimpleNode/SimpleNodeDataModel.cpp
+  src/MultipleChoiceNode/MultipleChoiceNodeDataModel.cpp
   src/MathOperationDataModel.cpp
   src/NumberDisplayDataModel.cpp
   src/NumberSourceDataModel.cpp
@@ -23,6 +24,8 @@ set(CALC_HEADER_FILES
   include/StartNode/StartNodeDataModel.hpp
   include/SimpleNode/SimpleNodeDataModel.hpp
   include/SimpleNode/SimpleNodeModel.hpp
+  include/MultipleChoiceNode/MultipleChoiceNodeDataModel.hpp
+  include/MultipleChoiceNode/MultipleChoiceNodeModel.hpp
   include/DialogueData/DialogueData.hpp
   include/DialogueData/SimpleDialogueData.hpp
   include/AdditionModel.hpp
@@ -42,6 +45,8 @@ qt_add_executable(project-dialogue
     ${CALC_SOURCE_FILES}
     ${CALC_HEADER_FILES}
     project-dialogue.qrc
+    include/DialogueData/MultipleChoiceDialogueData.hpp
+    include/DialogueData/MultipleChoiceData.hpp
 
 )
 
@@ -58,6 +63,7 @@ target_include_directories(project-dialogue;
         include/DialogueData
         include/StartNode
         include/SimpleNode
+        include/MultipleChoiceNode
         external/nodeeditor/include
 )
 

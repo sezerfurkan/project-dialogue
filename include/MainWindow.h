@@ -34,6 +34,7 @@
 
 #include "StartNodeDataModel.hpp"
 #include "SimpleNodeModel.hpp"
+#include "MultipleChoiceNodeModel.hpp"
 
 using QtNodes::ConnectionStyle;
 using QtNodes::DataFlowGraphicsScene;

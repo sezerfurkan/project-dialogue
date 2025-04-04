@@ -23,6 +23,7 @@ void MainWindow::initNodeViewWidget(){
     registry->registerModel<DivisionModel>("Operators");
     registry->registerModel<StartNodeDataModel>("Dialogue Nodes");
     registry->registerModel<SimpleNodeModel>("Dialogue Nodes");
+    registry->registerModel<MultipleChoiceNodeModel>("Dialogue Nodes");
 
 
     dataFlowGraphModel = new DataFlowGraphModel(registry);
@@ -132,20 +133,35 @@ void MainWindow::initPropertiesDockWidget(){
             connect(simpleNodeModel, &SimpleNodeDataModel::dataUpdated,
                     this, [this, propertiesWidget, simpleNodeModel](PortIndex portIndex){
 
-                if (simpleNodeModel->getInputDialogue().lock() && propertiesWidget->dialogueTitle().isEmpty()){
-                    propertiesWidget->setDialogueTitle(simpleNodeModel->getInputDialogue().lock()->dialogueId());
+                if (simpleNodeModel->getInputDialogue().lock()){
                     propertiesWidget->initDialogueMemory(simpleNodeModel->getInputDialogue().lock()->dialogueId());
                 }
 
             });
 
             connect(simpleNodeModel, &SimpleNodeDataModel::buttonClicked, this, [this, dockWidget, propertiesWidget, simpleNodeModel](){
+
                 if (simpleNodeModel->getInputDialogue().lock()){
                     propertiesWidget->setDialogueTitle(simpleNodeModel->getInputDialogue().lock()->dialogueId());
                     propertiesWidget->loadDialogueMemory(simpleNodeModel->getInputDialogue().lock()->dialogueId());
                 }
 
                 dockWidget->setVisible(true);
+            });
+
+            connect(propertiesWidget, &PropertiesWidget::dialoguesSaved, this, [this, dockWidget, propertiesWidget, simpleNodeModel](QString dialogueId){
+
+                simpleNodeModel->setOutputDialogue(propertiesWidget->getDialogueFromMemory(dialogueId));
+                qDebug() << simpleNodeModel->getOutputDialogue()->dialogueSize();
+            });
+        }
+
+        MultipleChoiceNodeModel *multipleChoiceModel = dynamic_cast<MultipleChoiceNodeModel*>
+            (dataFlowGraphModel->delegateModel<NodeDelegateModel>(nodeId));
+
+        if(multipleChoiceModel != nullptr){
+            connect(multipleChoiceModel, &MultipleChoiceNodeDataModel::portsChanged, this, [this, nodeId](){
+                Q_EMIT dataFlowGraphModel->nodeUpdated(nodeId);
             });
         }
     });
