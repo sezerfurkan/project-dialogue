@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow{parent}, registry(std::make_shared<NodeDelegateModelRegistry>())
+    : QMainWindow{parent}, registry(std::make_shared<NodeDelegateModelRegistry>()), playDialogueWindow(nullptr)
 {
     this->setWindowTitle("[*]Game Dialogue System");
     this->resize(800, 600);
@@ -24,6 +24,7 @@ void MainWindow::initNodeViewWidget(){
     registry->registerModel<StartNodeDataModel>("Dialogue Nodes");
     registry->registerModel<SimpleNodeModel>("Dialogue Nodes");
     registry->registerModel<MultipleChoiceNodeModel>("Dialogue Nodes");
+    registry->registerModel<EndNodeDataModel>("Dialogue Nodes");
 
 
     dataFlowGraphModel = new DataFlowGraphModel(registry);
@@ -164,6 +165,18 @@ void MainWindow::initPropertiesDockWidget(){
                 Q_EMIT dataFlowGraphModel->nodeUpdated(nodeId);
             });
         }
+
+        EndNodeDataModel *endNodeDataModel = dynamic_cast<EndNodeDataModel*>
+            (dataFlowGraphModel->delegateModel<NodeDelegateModel>(nodeId));
+
+        if(endNodeDataModel != nullptr){
+            connect(endNodeDataModel, &EndNodeDataModel::playDialogueButtonClicked, this, [this, nodeId, endNodeDataModel](){
+                qDebug() << "open";
+                qDebug() << endNodeDataModel->getDialogue()->dialogueId();
+                qDebug() << endNodeDataModel->getDialogue()->dialogueSize();
+                openPlayDialogueWindow(endNodeDataModel->getDialogue());
+            });
+        }
     });
 
     dockWidget->setWidget(propertiesWidget);
@@ -171,6 +184,15 @@ void MainWindow::initPropertiesDockWidget(){
     dockWidget->setVisible(false);
 
     this->addDockWidget(Qt::RightDockWidgetArea, dockWidget);
+}
+
+void MainWindow::openPlayDialogueWindow(std::shared_ptr<SimpleDialogueData> dialogueData)
+{
+    if (!playDialogueWindow) {
+        playDialogueWindow = new PlayDialogueWindow(this);
+        playDialogueWindow->setDialogueData(dialogueData);
+    }
+    playDialogueWindow->show();
 }
 
 

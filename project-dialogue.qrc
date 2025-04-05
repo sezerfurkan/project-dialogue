@@ -2,4 +2,7 @@
     <qresource prefix="/avatars">
         <file>avatar.png</file>
     </qresource>
+    <qresource prefix="/icons">
+        <file>assets/icons/playButton.png</file>
+    </qresource>
 </RCC>

@@ -3,15 +3,16 @@
 #include "MultipleChoiceDialogueData.hpp"
 
 MultipleChoiceNodeDataModel::MultipleChoiceNodeDataModel()
-    : _editDialogueButton{nullptr}, _addChoiceButton{nullptr}, _removeChoiceButton{nullptr}, _numOutputPorts{1}
+    : _editDialogueButton{nullptr}, _addChoiceButton{nullptr}, _removeChoiceButton{nullptr}, 
+    _numOutputPorts{1}, _numInputPorts{1}
 {
-
+    _inputDialogues.resize(1); // Start with one input port
 }
 
 unsigned int MultipleChoiceNodeDataModel::nPorts(PortType portType) const
 {
     if(portType == PortType::In){
-        return 1;
+        return _numInputPorts;
     }
     else{
         return _numOutputPorts;
@@ -110,6 +111,22 @@ void MultipleChoiceNodeDataModel::removeOutputPort()
     }
 }
 
+void MultipleChoiceNodeDataModel::addInputPort()
+{
+    _numInputPorts++;
+    _inputDialogues.resize(_numInputPorts);
+    Q_EMIT portsChanged();
+}
+
+void MultipleChoiceNodeDataModel::removeInputPort()
+{
+    if (_numInputPorts > 1) {
+        _numInputPorts--;
+        _inputDialogues.resize(_numInputPorts);
+        Q_EMIT portsChanged();
+    }
+}
+
 void MultipleChoiceNodeDataModel::addChoiceLineEdit()
 {
     QLineEdit* lineEdit = new QLineEdit();
@@ -156,13 +173,37 @@ void MultipleChoiceNodeDataModel::setInData(std::shared_ptr<NodeData> data, Port
 {
     auto dialogueData = std::dynamic_pointer_cast<MultipleChoiceDialogueData>(data);
 
-    if (!data) {
-        Q_EMIT dataInvalidated(0);
+    if (portIndex >= _inputDialogues.size()) {
+        // New connection is being made to a non-existent port
+        // Add a new input port
+        addInputPort();
     }
 
-    if (portIndex == 0){
-        _inputDialogue = dialogueData;
-        std::cout << "test" << std::endl;
+    if (!data) {
+        // Connection is being removed
+        _inputDialogues[portIndex].reset();
+        
+        // Check if this was the last port and we need to remove it
+        bool hasAnyConnection = false;
+        for (const auto& input : _inputDialogues) {
+            if (!input.expired()) {
+                hasAnyConnection = true;
+                break;
+            }
+        }
+        
+        if (!hasAnyConnection && _numInputPorts > 1) {
+            removeInputPort();
+        }
+
+        Q_EMIT dataInvalidated(0);
+    } else {
+        // New connection is being made
+        _inputDialogues[portIndex] = dialogueData;
+        if (portIndex == _inputDialogues.size() - 1) {
+            // If we connected to the last port, add a new one
+            addInputPort();
+        }
     }
 
     compute();

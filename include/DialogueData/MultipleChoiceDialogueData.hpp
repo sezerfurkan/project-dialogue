@@ -21,7 +21,7 @@ public:
         : _dialogueId{dialogueId}, _dialogue{dialogue}, _choices{choices}
     {}
 
-    NodeDataType type() const override { return NodeDataType{"multipleChoiceDialogue", "MultipleChoiceDialogue"}; }
+    NodeDataType type() const override { return NodeDataType{"dialogueData", "Dialogue Data"}; }
 
     void setDialogueId(QString const dialogueId) { _dialogueId = dialogueId; }
     void setDialogue(DialogueData* const dialogue) { _dialogue = dialogue; }

@@ -11,21 +11,25 @@ set(CMAKE_AUTORCC ON)
 
 
 set(CALC_SOURCE_FILES
+  src/PlayDialogueWindow/PlayDialogueWindow.cpp
   src/StartNode/StartNodeDataModel.cpp
   src/SimpleNode/SimpleNodeDataModel.cpp
   src/MultipleChoiceNode/MultipleChoiceNodeDataModel.cpp
+  src/EndNode/EndNodeDataModel.cpp
   src/MathOperationDataModel.cpp
   src/NumberDisplayDataModel.cpp
   src/NumberSourceDataModel.cpp
 )
 
 set(CALC_HEADER_FILES
+  include/PlayDialogueWindow/PlayDialogueWindow.hpp
   include/PropertiesWidget/PropertiesWidget.hpp
   include/StartNode/StartNodeDataModel.hpp
   include/SimpleNode/SimpleNodeDataModel.hpp
   include/SimpleNode/SimpleNodeModel.hpp
   include/MultipleChoiceNode/MultipleChoiceNodeDataModel.hpp
   include/MultipleChoiceNode/MultipleChoiceNodeModel.hpp
+  include/EndNode/EndNodeDataModel.hpp
   include/DialogueData/DialogueData.hpp
   include/DialogueData/SimpleDialogueData.hpp
   include/AdditionModel.hpp
@@ -60,10 +64,12 @@ target_link_libraries(project-dialogue
 target_include_directories(project-dialogue;
     PRIVATE
         include
+        include/PlayDialogueWindow
         include/DialogueData
         include/StartNode
         include/SimpleNode
         include/MultipleChoiceNode
+        include/EndNode
         external/nodeeditor/include
 )
 

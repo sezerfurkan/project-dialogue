@@ -49,14 +49,15 @@ void SimpleNodeDataModel::setInData(std::shared_ptr<NodeData> data, PortIndex po
         Q_EMIT dataInvalidated(0);
     }
 
-    if (portIndex == 0){
+    if (portIndex == 0 && dialogueData != nullptr){
         _inputDialogue = dialogueData;
+        _outputDialogue = std::make_shared<SimpleDialogueData>(dialogueData->dialogueId());
         //_outputDialogue = dialogueData;
-        std::cout << "test" << std::endl;
+        std::cout << _inputDialogue.lock()->dialogueSize() << std::endl;
     }
 
-
-    compute();
+    Q_EMIT dataUpdated(0);
+    //compute();
 }
 
 

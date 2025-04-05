@@ -20,7 +20,7 @@ public:
         : _dialogueId{dialogueId}, _isStartNodeData{isStartNodeData}
     {}
 
-    NodeDataType type() const override { return NodeDataType{"simpleDialogue", "SimpleDialogue"}; }
+    NodeDataType type() const override { return NodeDataType{"dialogueData", "Dialogue Data"}; }
 
     void setDialogueId(QString const dialogueId) { _dialogueId = dialogueId; }
     void addDialogue(DialogueData* const dialogue) { _dialogueChain.emplace_back(dialogue); }

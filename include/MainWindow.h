@@ -23,7 +23,9 @@
 #include <QtGui/QScreen>
 #include <QMainWindow>
 
+
 #include <PropertiesWidget/PropertiesWidget.hpp>
+#include <PlayDialogueWindow.hpp>
 
 #include "AdditionModel.hpp"
 #include "DivisionModel.hpp"
@@ -35,6 +37,7 @@
 #include "StartNodeDataModel.hpp"
 #include "SimpleNodeModel.hpp"
 #include "MultipleChoiceNodeModel.hpp"
+#include "EndNodeDataModel.hpp"
 
 using QtNodes::ConnectionStyle;
 using QtNodes::DataFlowGraphicsScene;
@@ -57,10 +60,14 @@ private:
     DataFlowGraphicsScene *scene;
     GraphicsView *view;
 
+    PlayDialogueWindow *playDialogueWindow;
+
     void initMenuBarWidget();
     void initComponentsDockWidget();
     void initPropertiesDockWidget();
     void initNodeViewWidget();
+
+    void openPlayDialogueWindow(std::shared_ptr<SimpleDialogueData> dialogueData);
 
 
 signals:

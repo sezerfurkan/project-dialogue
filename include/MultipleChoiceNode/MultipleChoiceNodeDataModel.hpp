@@ -44,6 +44,8 @@ public:
 
     void addOutputPort();
     void removeOutputPort();
+    void addInputPort();
+    void removeInputPort();
     void addChoiceLineEdit();
     void removeChoiceLineEdit();
     QString getChoiceText(int index) const;
@@ -76,4 +78,6 @@ protected:
     QVector<QLineEdit*> _choiceLineEdits;
 
     unsigned int _numOutputPorts;
+    unsigned int _numInputPorts;
+    QVector<std::weak_ptr<MultipleChoiceDialogueData>> _inputDialogues;
 };

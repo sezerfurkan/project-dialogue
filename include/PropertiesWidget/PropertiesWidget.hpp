@@ -254,6 +254,7 @@ private slots:
 
         dialoguesMemory[dialogueId]->clear();
 
+        dialoguesMemory[dialogueId]->setDialogueId(dialogueId);
         for (int i = 0; i < layout->count(); ++i) {
             if (QGroupBox *dialogueGroupBox = qobject_cast<QGroupBox*>(layout->itemAt(i)->widget())) {
                 QLineEdit* dialogueCharacterEdit = dialogueGroupBox->findChild<QLineEdit*>();
